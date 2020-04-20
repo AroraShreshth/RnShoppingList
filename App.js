@@ -1,25 +1,44 @@
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, FlatList } from 'react-native';
 import Header from './components/Header';
-import { uuid } from 'uuidv4';
+import uuid from 'uuid-random';
 import ListItem from './components/ListItem';
+import AddItem from './components/AddItem';
 const App = () => {
   const [items, setItems] = useState([
-    { id: 1, text: 'Milk' },
-    { id: 2, text: 'Bread' },
-    { id: 3, text: 'Juice' },
-    { id: 4, text: 'Paneer' },
-    { id: 5, text: 'Dal' },
-    { id: 6, text: 'Butter' },
+    { id: uuid(), text: 'Milk' },
+    { id: uuid(), text: 'Bread' },
+    { id: uuid(), text: 'Juice' },
+    { id: uuid(), text: 'Paneer' },
+    { id: uuid(), text: 'Dal' },
+    { id: uuid(), text: 'Butter' },
   ]);
+
+
+  const deleteItem = (id) => {
+    setItems(prevItems => {
+      return prevItems.filter(item => item.id != id)
+    });
+  }
+
+  const addItem = (text) => {
+    setItems(prevItems => {
+      return [{ id: uuid(), text }, ...prevItems];
+    });
+  }
+
+  // Math.max((i) => prevItems[i].id) + 1
+
+
   return (
 
     <View style={styles.container}>
       <Header />
+      <AddItem addItem={addItem} />
       <FlatList
         data={items}
-        renderItem={({ item }) => <ListItem item={item} />}
-        keyExtractor={item => item.id}
+        renderItem={({ item }) => <ListItem item={item} deleteItem={deleteItem} />}
+      // keyExtractor={item => item.id}
       />
       {/* <Text >User Application !</Text>
       <Image style={styles.img} source={{ uri: 'https://randomuser.me/api/portraits/lego/5.jpg' }}></Image> */}
